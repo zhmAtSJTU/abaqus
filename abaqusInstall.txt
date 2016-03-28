@@ -1,0 +1,43 @@
+sudo apt-get install gfortran python-numpy python-scipy python-vtk6 python-h5py libvtk6-dev liblapack-dev mpich git valgrind
+sudo apt-get install csh libjpeg62 libstdc++5 rpm openjdk-6-jre-headless
+
+cd /public/abaqus613
+Scratch directory is: /public/abaqus613	
+HOSTNAME:sever-lj (AUTOMATIC)
+
+cp ABAQUS.dat /public/abaqus613/License/ABAQUS.lic
+mkdir /usr/tmp/.flexlm
+mkdir /usr/local/flexlm/licenses
+cp ABAQUS.lic /usr/local/flexlm/licenses/license.dat
+
+install abaqus product
+host: 27011@HOSTNAME
+
+after finishing the installation, creat two soft links
+ln -s /public/abaqus613/Commands/abaqus /usr/local/bin/abaqus
+ln -s /public/abaqus613/License/lmgrd /usr/local/bin/lmgrd
+
+install ivf
+dpkg -i libstdc++5_3.3.6-27.2_amd64.deb 
+cp libstdc++5.0.7 /usr/lib32
+cd /usr/lib32
+ln -s libstdc++.so.5.0.7 libstc++.so.5
+mount -o loop Intel_Parallel_Studio_XE_2013Linux/Intel_Parallel_Studio_XE\ 2013Linux.iso /mnt
+
+mkdir ivf2013
+cd ivf2013
+/mnt/install.sh
+
+put the license file in the folder
+/public/ivf2013
+
+the default install directory      [ /opt/intel ]
+source /opt/intel/bin/compilervars.sh intel64
+creat a soft link
+ln -s /opt/intel/bin/ifort /usr/local/bin/ifort
+
+----------------------------------------------------------------------------------------------------
+run abaqus
+abaqus -j jobname user=xxx.f cpus=8 int
+open cae
+abaqus cae -mesa
