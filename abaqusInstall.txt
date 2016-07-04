@@ -1,5 +1,21 @@
-sudo apt-get install gfortran python-numpy python-scipy python-vtk6 python-h5py libvtk6-dev liblapack-dev mpich git valgrind
+sudo apt-get install vim gfortran python-numpy python-scipy python-vtk6 python-h5py libvtk6-dev liblapack-dev mpich git valgrind cmake ctags
 sudo apt-get install csh libjpeg62 libstdc++5 rpm openjdk-6-jre-headless
+
+-----damask install---
+after install ifort ****
+check ifort icc icpc -v
+
+./configure --download-chaco --download-exodusii --download-fftw --download-hdf5 --download-hypre --download-metis \ --download-ml(incorrect)
+--download-openmpi --download-mumps --download-netcdf --download-parmetis --download-scalapack --download-suitesparse \
+--download-superlu --download-superlu_dist --download-triangle --with-blas-lapack-dir=$IMKL_ROOT/lib/intel64 --with-c2html=0 \
+--with-fc=ifort --with-cc=icc --with-cxx=icpc --with-debugging=0 --with-ssl=0 --with-x=0 \
+FFLAGS="${FFLAGS} -stand f08 -standard-semantics" \
+COPTFLAGS="-O3 -xHost -no-prec-div" \
+CXXOPTFLAGS="-O3 -xHost -no-prec-div" \
+FOPTFLAGS="-O3 -xHost -no-prec-div" \
+PETSC_ARCH=ifort \
+PETSC_DIR=`pwd`
+
 
 cd /public/abaqus613
 Scratch directory is: /public/abaqus613	
@@ -18,8 +34,9 @@ ln -s /public/abaqus613/Commands/abaqus /usr/local/bin/abaqus
 ln -s /public/abaqus613/License/lmgrd /usr/local/bin/lmgrd
 
 install ivf
-dpkg -i libstdc++5_3.3.6-27.2_amd64.deb 
-cp libstdc++5.0.7 /usr/lib32
+sudo dpkg -i libstdc++5_3.3.6-27.2_amd64.deb 
+# _i386
+cp libstdc++.so.5.0.7 /usr/lib32
 cd /usr/lib32
 ln -s libstdc++.so.5.0.7 libstc++.so.5
 mount -o loop Intel_Parallel_Studio_XE_2013Linux/Intel_Parallel_Studio_XE\ 2013Linux.iso /mnt
