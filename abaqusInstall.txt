@@ -1,7 +1,9 @@
-sudo apt-get install vim gfortran python-numpy python-scipy python-vtk6 python-h5py libvtk6-dev liblapack-dev mpich git valgrind cmake ctags
+sudo apt-get install vim gfortran python-numpy python-scipy python-vtk6 python-h5py libvtk6-dev liblapack-dev mpich git valgrind cmake ctags meld
 sudo apt-get install csh libjpeg62 libstdc++5 rpm openjdk-6-jre-headless
 
 -----damask install---
+
+arch = ifort
 after install ifort ****
 check ifort icc icpc -v
 
@@ -16,22 +18,53 @@ FOPTFLAGS="-O3 -xHost -no-prec-div" \
 PETSC_ARCH=ifort \
 PETSC_DIR=`pwd`
 
+arch = gfortran
+install acml
+tar -xzf acml-5-3-1-ifort-64bit.tgz
+sudo ./install-acml-5-3-1-ifort-64bit.sh
+
+./configure --download-openmpi --with-blas-lapack-dir=/opt/acml5.3.1/gfortran64 --download-fftw --download-hdf5 \
+--with-fc=gfortran --with-cc=gcc --with-cxx=g++ --with-c2html=0 --with-x=0 --with-ssl=0 --with-debugging=0 \
+COPTFLAGS=-O2 CXXOPTFLAGS=-O2 FOPTFLAGS=-O2 PETSC_ARCH=gfortran PETSC_DIR=`pwd`
+
 
 cd /public/abaqus613
 Scratch directory is: /public/abaqus613	
 HOSTNAME:sever-lj (AUTOMATIC)
 
 cp ABAQUS.dat /public/abaqus613/License/ABAQUS.lic
-mkdir /usr/tmp/.flexlm
-mkdir /usr/local/flexlm/licenses
+sudo mkdir /usr/tmp/.flexlm
+sudo mkdir /usr/local/flexlm/licenses
 cp ABAQUS.lic /usr/local/flexlm/licenses/license.dat
+sudo software/abaqus613/License/lmgrd
 
 install abaqus product
+License server 1
+20711@haiming
 host: 27011@HOSTNAME
 
 after finishing the installation, creat two soft links
 ln -s /public/abaqus613/Commands/abaqus /usr/local/bin/abaqus
 ln -s /public/abaqus613/License/lmgrd /usr/local/bin/lmgrd
+
+if report the error like
+haiming@haiming:~$ software/abaqus613/Commands/abaqus cae -mesa
+Cannot find license file.
+
+ The license files (or license server system network addresses) attempted are 
+listed below.  Use LM_LICENSE_FILE to use a different license file,
+ or contact your software provider for a license file.
+Feature:       cae
+Filename:      
+License path:  :
+FLEXnet Licensing error:-1,359.  System Error: 2 "No such file or directory"
+For further information, refer to the FLEXnet Licensing documentation,
+available at "www.acresso.com".
+Abaqus Error: Abaqus/CAE Kernel exited with an error.
+
+then just specify the license file
+haiming@haiming:~$ export LM_LICENSE_FILE=/home/haiming/software/abaqus613/License/license.dat 
+
 
 install ivf
 sudo dpkg -i libstdc++5_3.3.6-27.2_amd64.deb 
@@ -52,6 +85,11 @@ the default install directory      [ /opt/intel ]
 source /opt/intel/bin/compilervars.sh intel64
 creat a soft link
 ln -s /opt/intel/bin/ifort /usr/local/bin/ifort
+
+after install idb
+we must install java,https://www.java.com/en/download/linux_manual.jsp
+tar the file, and copy bin, lib into /usr/local, then we can use the GUI of idb
+
 
 ----------------------------------------------------------------------------------------------------
 run abaqus
